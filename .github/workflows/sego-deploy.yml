@@ -1,0 +1,24 @@
+name: Superego Development Deployment
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+    types:
+      - closed
+jobs:
+  build:
+      runs-on: ubuntu-latest
+      
+      steps:
+        - name: Synchronise workspace
+          # You may pin to the exact commit or the version.
+          # uses: appleboy/ssh-action@55dabf81b49d4120609345970c91507e2d734799
+          uses: appleboy/ssh-action@v1.0.0
+          with:
+            # SSH host address.
+            host: dev.allybros.com
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            username: git-user
+            script: sudo apt update
+            debug:  true
