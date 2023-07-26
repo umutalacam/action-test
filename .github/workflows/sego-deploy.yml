@@ -20,5 +20,50 @@ jobs:
             host: dev.allybros.com
             key: ${{ secrets.SEGODEVPK }}
             username: git-user
-            script: sudo apt update
+            script: |
+              echo "Change working directory"
+              cd /home/git-user/superego/superego-api
+              pwd
+              echo "Synchronise changes from git"
+              git checkout development
+              git reset --hard
+              git fetch
+              git pull origin development
             debug:  true
+            
+        - name: Build docker image
+          # You may pin to the exact commit or the version.
+          # uses: appleboy/ssh-action@55dabf81b49d4120609345970c91507e2d734799
+          uses: appleboy/ssh-action@v1.0.0
+          with:
+            # SSH host address.
+            host: dev.allybros.com
+            key: ${{ secrets.SEGODEVPK }}
+            username: git-user
+            script: |
+              echo "Change working directory"
+              cd /home/git-user/superego/superego-api
+              echo "Build image"
+              docker build .
+            debug:  true
+            
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker compose
+        # You may pin to the exact commit or the version.
+        # uses: appleboy/ssh-action@55dabf81b49d4120609345970c91507e2d734799
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          # SSH host address.
+          host: dev.allybros.com
+          key: ${{ secrets.SEGODEVPK }}
+          username: git-user
+          script: |
+            echo "Change working directory"
+            cd /home/git-user/superego/
+            pwd
+            echo "Compose deployment"
+            sudo docker compose up
+          debug:  true
+
