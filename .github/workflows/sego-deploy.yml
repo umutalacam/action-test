@@ -18,7 +18,7 @@ jobs:
           with:
             # SSH host address.
             host: dev.allybros.com
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            key: ${{ secrets.SEGODEVPK }}
             username: git-user
             script: sudo apt update
             debug:  true
